@@ -1,12 +1,15 @@
 package com.keyin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.keyin.domain.report.ClassAttendanceReport;
+import com.keyin.domain.report.StudentAttendanceReport;
 import com.keyin.http.RESTClient;
 
 public class AttendanceReportGeneratorCLI {
     private RESTClient restClient;
 
-    public String generateAttendanceReport() {
-        return restClient.getResponseFromHTTPRequest();
+    public ClassAttendanceReport generateAttendanceReport() throws JsonProcessingException {
+        return restClient.buildClassAttendanceReportFromResponse(restClient.getResponseFromHTTPRequest());
     }
 
     public RESTClient getRestClient() {
@@ -22,7 +25,7 @@ public class AttendanceReportGeneratorCLI {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         for (String arg : args) {
             System.out.println(arg);
         }
@@ -38,7 +41,25 @@ public class AttendanceReportGeneratorCLI {
 
             cliApp.setRestClient(restClient);
 
-            System.out.println(cliApp.generateAttendanceReport());
+
+            ClassAttendanceReport classAttendanceReport = cliApp.generateAttendanceReport();
+
+            System.out.println("Class Name: " + classAttendanceReport.getCourseName());
+            System.out.println("Semester: " + classAttendanceReport.getSemester());
+            System.out.println("Year: " + classAttendanceReport.getYear());
+            System.out.println("Date of Class: " + classAttendanceReport.getClassOccurenceDate());
+
+            System.out.println("----------------------");
+
+            System.out.println("Student Attendance Report");
+
+            System.out.println("----------------------");
+
+            for (StudentAttendanceReport studentAttendanceReport : classAttendanceReport.getStudentAttendanceReports()) {
+                System.out.println(studentAttendanceReport.getName() +
+                        ", " + studentAttendanceReport.getEmailAddress() +
+                        ", " + (studentAttendanceReport.isAttended() ? "P" : "A"));
+            }
         }
 
     }

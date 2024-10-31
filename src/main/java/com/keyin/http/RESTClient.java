@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.keyin.domain.report.ClassAttendanceReport;
 
 import java.io.IOException;
 import java.net.URI;
@@ -36,15 +37,16 @@ public class RESTClient {
         return responseBody;
     }
 
-//    public List<Airport> buildAirportListFromResponse(String response) throws JsonProcessingException {
-//        List<Airport> airports = new ArrayList<Airport>();
-//
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-//        airports = mapper.readValue(response, new TypeReference<List<Airport>>(){});
-//
-//        return airports;
-//    }
+    public ClassAttendanceReport buildClassAttendanceReportFromResponse(String response) throws JsonProcessingException {
+        ClassAttendanceReport classAttendanceReport;
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        classAttendanceReport = mapper.readValue(response, new TypeReference<ClassAttendanceReport>(){});
+
+        return classAttendanceReport;
+    }
 
     public String getServerURL() {
         return serverURL;
